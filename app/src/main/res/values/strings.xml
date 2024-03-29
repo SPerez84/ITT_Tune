@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ITT_Tune</string>
+    <string name="textFieldPlaceHolder">Ingresa Texto a traducir</string>
+    <string name="btnSeleccionIdioma">Selecciona Idioma</string>
+</resources>

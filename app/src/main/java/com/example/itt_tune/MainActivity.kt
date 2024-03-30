@@ -6,6 +6,8 @@ import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -25,6 +28,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -35,6 +40,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -52,7 +59,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CuadrodeTexto()
+                    PantallaInicial()
                 }
             }
         }
@@ -63,13 +70,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppPreview() {
     ITT_TuneTheme {
-        CuadrodeTexto()
+        PantallaInicial()
     }
 }
 
 @Composable
-fun CuadrodeTexto() {
-    val primerTextFieldValue = remember { mutableStateOf("") }
+fun PantallaInicial() {
     Column (
         modifier = Modifier
             .statusBarsPadding()
@@ -82,44 +88,65 @@ fun CuadrodeTexto() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
         ){
-        OutlinedTextField (
-            value = primerTextFieldValue.value,
-            placeholder = { Text(text =  stringResource(id = R.string.textFieldPlaceHolder))},
-            onValueChange = { newValue ->
-                primerTextFieldValue.value = newValue
-            }, // Acción a realizar cuando cambia el valor del cuadro de texto
-            modifier = Modifier
-                .padding(10.dp) // Añadir padding al cuadro de texto
-                .fillMaxWidth() // Establecer el ancho del cuadro de texto en dp
-                .height(IntrinsicSize.Max),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done,
-            ),
-            )
+        Titulo(modifier = Modifier.fillMaxWidth())
+        textFieldInput()
         Spacer(modifier = Modifier
             .height(5.dp))
         Row(modifier = Modifier
-            .wrapContentSize(Alignment.Center)) {
+            .wrapContentSize(Alignment.Center)
+            ) {
             botonSeleccion()
+            Spacer(modifier = Modifier
+                .size(10.dp))
             listaIdiomas()
         }
-        TextField(
-            value = " ", // Valor inicial del cuadro de texto
-            onValueChange = {}, // Acción a realizar cuando cambia el valor del cuadro de texto
-            modifier = Modifier
-                .padding(10.dp) // Añadir padding al cuadro de texto
-                .fillMaxWidth()  // Establecer el ancho del cuadro de texto en dp
-                .height(IntrinsicSize.Max),
-            readOnly = true,
-        )
+        textFieldOutput()
     }
 }
 
 @Composable
+fun Titulo(
+    modifier: Modifier = Modifier
+        .background(Color.Red) // Color rojo
+){
+    Card (modifier = Modifier
+        .background(Color.Transparent)){
+        Row {
+            Text(text = "Bienvenido a ITT TextTune")
+            Spacer(modifier = Modifier.size(10.dp))
+            Image(painter = painterResource(id = R.drawable.logo_textune),
+                contentDescription ="logoTextune" ,
+                modifier = Modifier.size(32.dp))
+        }
+
+    }
+}
+
+@Composable
+fun textFieldInput(){
+    val primerTextFieldValue = remember { mutableStateOf("") }
+    OutlinedTextField (
+        value = primerTextFieldValue.value,
+        placeholder = { Text(text =  stringResource(id = R.string.textFieldPlaceHolder))},
+        onValueChange = { newValue ->
+            primerTextFieldValue.value = newValue
+        }, // Acción a realizar cuando cambia el valor del cuadro de texto
+        modifier = Modifier
+            .padding(10.dp) // Añadir padding al cuadro de texto
+            .fillMaxWidth() // Establecer el ancho del cuadro de texto en dp
+            .height(200.dp),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done,
+        ),
+    )
+}
+
+@Composable
 fun botonSeleccion(modifier: Modifier = Modifier
-    .wrapContentSize(Alignment.Center)){
-    Button(onClick = { /*TODO*/ }) {
+    .wrapContentSize(Alignment.Center)
+    ){
+    FloatingActionButton(onClick = { /*TODO*/ }) {
         Text(text = stringResource(R.string.btnSeleccionIdioma))
     }
 }
@@ -129,4 +156,17 @@ fun listaIdiomas(){
     Button(onClick = { /*TODO*/ }) {
         Text(text = ">")
     }
+}
+
+@Composable
+fun textFieldOutput(){
+    TextField(
+        value = " ", // Valor inicial del cuadro de texto
+        onValueChange = {}, // Acción a realizar cuando cambia el valor del cuadro de texto
+        modifier = Modifier
+            .padding(10.dp) // Añadir padding al cuadro de texto
+            .fillMaxWidth()  // Establecer el ancho del cuadro de texto en dp
+            .height(200.dp),
+        readOnly = true,
+    )
 }

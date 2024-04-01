@@ -167,7 +167,7 @@ fun Titulo(){
 @Composable
 fun textFieldInput(
     primerTextFieldValue: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField (
         label = { Text(text =  stringResource(id = R.string.textFieldPlaceHolder))},
@@ -186,7 +186,6 @@ fun textFieldInput(
 
 @Composable
 fun botonSeleccion(modifier: Modifier = Modifier
-    //.wrapContentSize(Alignment.Center)
     ){
     FloatingActionButton(
         onClick = { /*TODO*/ },
@@ -199,8 +198,7 @@ fun botonSeleccion(modifier: Modifier = Modifier
 }
 
 @Composable
-fun botonCamara(modifier: Modifier = Modifier
-   // .wrapContentSize(Alignment.Center)
+fun botonCamara(
 ){
     FloatingActionButton(
         onClick = { /*TODO*/ },
@@ -224,9 +222,7 @@ fun listaIdiomas(){
 fun textFieldOutput(
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
     ) {
-    //var segundoTextFieldValue by remember { mutableStateOf(traduccion) }
     TextField(
         value = value,
         onValueChange = onValueChange,

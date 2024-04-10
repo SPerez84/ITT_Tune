@@ -40,6 +40,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -59,6 +60,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -96,12 +98,13 @@ fun AppPreview() {
 
 @Composable
 fun PantallaInicial() {
+    val marcoMedio = dimensionResource(id = R.dimen.padding_medium)
+    val espacioBtn = dimensionResource(id = R.dimen.espacio_Chico)
     var primerTextFieldValue by remember { mutableStateOf("") }
-    var traduccion : String = " "
     Column(
         modifier = Modifier
             .statusBarsPadding()
-            .padding(horizontal = 5.dp)
+            .padding(marcoMedio)
             .safeDrawingPadding()
             .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
@@ -131,9 +134,9 @@ fun PantallaInicial() {
 
             ) {
                 botonCamara()
-                Spacer(modifier = Modifier.size(10.dp))
+                Spacer(modifier = Modifier.size(espacioBtn))
                 botonSeleccion()
-                Spacer(modifier = Modifier.size(10.dp))
+                Spacer(modifier = Modifier.size(espacioBtn))
                 listaIdiomas()
             }
         }
@@ -141,14 +144,12 @@ fun PantallaInicial() {
 }
 @Composable
 fun Titulo(){
-    Card (modifier = Modifier
-        .background(Color.Transparent)
-        .wrapContentSize(Alignment.TopCenter)
-        .padding(top = 15.dp)
+    val espacioBtn = dimensionResource(id = R.dimen.espacio_Chico)
+    Card (
+        elevation = CardDefaults.cardElevation(defaultElevation = 10 .dp)
     ){
-        Surface {
             Row(
-                modifier = Modifier.padding(10.dp),
+                modifier = Modifier.background(Color.White),
                 verticalAlignment = Alignment.Top
             ) {
                 Text(
@@ -156,12 +157,11 @@ fun Titulo(){
                     fontFamily = FontFamily.Serif,
                     fontSize = 30.sp
                 )
-                Spacer(modifier = Modifier.size(10.dp))
+                Spacer(modifier = Modifier.size(espacioBtn))
                 Image(painter = painterResource(id = R.drawable.logo_textune),
                     contentDescription ="logoTextune" ,
                     modifier = Modifier.size(35.dp))
             }
-        }
     }
 }
 @Composable
@@ -172,10 +172,12 @@ fun textFieldInput(
     OutlinedTextField (
         label = { Text(text =  stringResource(id = R.string.textFieldPlaceHolder))},
         value = primerTextFieldValue,
+        shape = MaterialTheme.shapes.large,
         onValueChange = onValueChange,
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
+            //.clip(MaterialTheme.shapes.medium)
             .height(200.dp),
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,
@@ -223,14 +225,15 @@ fun textFieldOutput(
     value: String,
     onValueChange: (String) -> Unit,
     ) {
-    TextField(
+    OutlinedTextField(
         value = value,
+        shape = MaterialTheme.shapes.large,
         onValueChange = onValueChange,
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
-            .absoluteOffset(y = -190.dp)
-            .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(8.dp))
+            .absoluteOffset(y = -185.dp)
+            //.border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(8.dp))
             .height(200.dp),
         readOnly = true,
     )

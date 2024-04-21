@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.itt_tune.ui.theme.ITT_TuneTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +83,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
+                    //val marsViewModel: MarsViewModel =
+                    //   viewModel(factory = MarsViewModel.Factory)
+                    //HomeScreen(
+                    //                marsUiState = marsViewModel.marsUiState,
+                    //                contentPadding = it
+                    //            )
                     PantallaInicial()
                 }
             }

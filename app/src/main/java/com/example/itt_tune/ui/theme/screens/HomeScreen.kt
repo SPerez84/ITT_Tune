@@ -1,3 +1,4 @@
+import android.view.translation.TranslationRequest
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -40,9 +42,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.itt_tune.R
+import com.example.itt_tune.data.ITT_TuneRepository
+import com.example.itt_tune.network.translations
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun PantallaInicial() {
+    val viewModel: ITT_TuneViewModel = viewModel()
     val marcoMedio = dimensionResource(id = R.dimen.padding_medium)
     val espacioBtn = dimensionResource(id = R.dimen.espacio_Chico)
     var primerTextFieldValue by remember { mutableStateOf("") }
@@ -64,12 +71,12 @@ fun PantallaInicial() {
             Column {
                 textFieldInput(
                     primerTextFieldValue = primerTextFieldValue,
-                    onValueChange = { primerTextFieldValue = it }
+                    viewModel,
+                    onValueChange = {  }
                 )
                 Spacer(modifier = Modifier.height(180.dp))
                 textFieldOutput(
-                    value = primerTextFieldValue,
-                    onValueChange = { primerTextFieldValue = it }
+                    viewModel
                 )
             }
             Row(
@@ -112,13 +119,17 @@ fun Titulo(){
 @Composable
 fun textFieldInput(
     primerTextFieldValue: String,
+    viewModel: ITT_TuneViewModel,
     onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField (
         label = { Text(text =  stringResource(id = R.string.textFieldPlaceHolder)) },
         value = primerTextFieldValue,
         shape = MaterialTheme.shapes.large,
-        onValueChange = onValueChange,
+        onValueChange = { newValue ->
+            onValueChange(newValue)
+            viewModel.getAzureResponse(newValue)
+        },
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
@@ -130,6 +141,8 @@ fun textFieldInput(
         ),
     )
 }
+
+
 
 @Composable
 fun botonSeleccion(modifier: Modifier = Modifier
@@ -167,19 +180,41 @@ fun listaIdiomas(){
 
 @Composable
 fun textFieldOutput(
-    value: String,
-    onValueChange: (String) -> Unit,
+    viewModel: ITT_TuneViewModel
 ) {
+    val uiState by viewModel.ittTuneUiState.observeAsState()
+    when (uiState) {
+        is ITTTuneUIState.Success -> {
+            val successState = uiState as ITTTuneUIState.Success
+            Text(
+                text = successState.translation,
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth()
+                    .absoluteOffset(y = -185.dp)
+                    .height(200.dp)
+            )
+        }
+        ITTTuneUIState.Error -> {
+            Text("Error fetching data")
+        }
+        ITTTuneUIState.Loading -> {
+            CircularProgressIndicator()
+        }
+        
+        else -> {
+
+        }
+    }
     OutlinedTextField(
-        value = value,
+        value = "", // Replace with the actual value
+        onValueChange = {}, // Replace with the actual onValueChange lambda
         shape = MaterialTheme.shapes.large,
-        onValueChange = onValueChange,
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
             .absoluteOffset(y = -185.dp)
-            //.border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(8.dp))
             .height(200.dp),
-        readOnly = true,
+        readOnly = true
     )
 }
